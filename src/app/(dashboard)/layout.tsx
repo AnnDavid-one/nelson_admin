@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import Sidebar from '@/components/Sidebar';
+import Navbar from '@/components/Navbar';
 import Header from '@/components/Header';
 import { api } from '@/lib/api';
 
@@ -44,14 +44,12 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <Sidebar currentPath={pathname} />
-      <div className="flex-1 flex flex-col ml-64">
-        <Header />
-        <main className="flex-1 overflow-y-auto p-6">
-          {children}
-        </main>
-      </div>
+    <div className="min-h-screen flex flex-col bg-gray-100">
+      <Navbar currentPath={pathname} />
+      <Header />
+      <main className="flex-1 p-4 sm:p-6">
+        {children}
+      </main>
     </div>
   );
 }

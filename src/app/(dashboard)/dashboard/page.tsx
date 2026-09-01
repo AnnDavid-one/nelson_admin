@@ -53,22 +53,15 @@ export default function DashboardPage() {
       color: 'bg-green-500',
       href: '/orders',
     },
-    {
-      title: 'Revenue',
-      value: `₦${((stats?.totalRevenueKobo || 0) / 100).toLocaleString()}`,
-      subtitle: 'Total sales',
-      icon: DollarSign,
-      color: 'bg-yellow-500',
-      href: '/orders',
-    },
     // {
-    //   title: 'Inquiries',
-    //   value: stats?.totalInquiries || 0,
-    //   subtitle: `${stats?.unhandledInquiries || 0} unhandled`,
-    //   icon: MessageSquare,
-    //   color: 'bg-purple-500',
-    //   href: '/inquiries',
+    //   title: 'Revenue',
+    //   value: `₦${((stats?.totalRevenueKobo || 0) / 100).toLocaleString()}`,
+    //   subtitle: 'Total sales',
+    //   icon: DollarSign,
+    //   color: 'bg-yellow-500',
+    //   href: '/orders',
     // },
+    // 1223`    `d` 
     {
       title: 'Customers',
       value: stats?.totalCustomers || 0,
@@ -158,7 +151,7 @@ export default function DashboardPage() {
           </div>
         </Link>
 
-        <Link
+        {/* <Link
           href="/settings"
           className="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow flex items-center gap-4"
         >
@@ -169,7 +162,7 @@ export default function DashboardPage() {
             <h3 className="font-semibold text-gray-800">Settings</h3>
             <p className="text-sm text-gray-500">Update site configuration</p>
           </div>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

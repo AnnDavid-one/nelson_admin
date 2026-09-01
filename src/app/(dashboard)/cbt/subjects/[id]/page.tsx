@@ -292,7 +292,7 @@ const [subject, setSubject] = useState<CBTSubject | null>(null);
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <h2 className="text-xl font-bold mb-4">
               {editingQuestion ? "Edit Question" : "Add Question"}
@@ -313,7 +313,7 @@ const [subject, setSubject] = useState<CBTSubject | null>(null);
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Option A *
@@ -431,7 +431,7 @@ const [subject, setSubject] = useState<CBTSubject | null>(null);
 
       {/* bulk upload modal */}
       {showBulkModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <h2 className="text-xl font-bold mb-4">Bulk Import Questions</h2>
             <p className="text-sm text-gray-500 mb-4">
