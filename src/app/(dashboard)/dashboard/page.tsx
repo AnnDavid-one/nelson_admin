@@ -20,20 +20,31 @@ import {
 export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const loadStats = async () => {
       try {
         const data = await api.getDashboardStats();
-        setStats(data);
-      } catch (error) {
-        console.error("Failed to load stats:", error);
+        if (isMounted) setStats(data);
+      } catch (err: any) {
+        console.error("Failed to load stats:", err);
+        if (isMounted)
+          setError(
+            "Failed to load metrics. Check your network or admin login.",
+          );
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
 
     loadStats();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const cards = [
@@ -80,6 +91,18 @@ export default function DashboardPage() {
     );
   }
 
+  if (error || !stats) {
+    return (
+      <div className="p-6 bg-red-50 text-red-700 rounded-lg border border-red-200">
+        <h2 className="font-semibold text-lg">
+          Unable to load dashboard stats
+        </h2>
+        <p className="text-sm mt-1">
+          {error || "No data returned from the server."}
+        </p>
+      </div>
+    );
+  }
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-800 mb-6">Dashboard</h1>
