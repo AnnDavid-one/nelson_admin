@@ -72,6 +72,7 @@ export interface Book {
   slug: string;
   description: string;
   author: string;
+  subtitle:string | null;
   format: BookFormat;
   priceKobo: number;
   coverImageUrl: string | null;
@@ -158,6 +159,7 @@ export interface CBTQuestion {
   explanation: string | null;
   createdAt: string;
   subject?: CBTSubject;
+  imageUrl?: string;
 }
 
 // CBTPracticeSession

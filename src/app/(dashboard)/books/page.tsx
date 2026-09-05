@@ -116,8 +116,11 @@ export default function BooksPage() {
                           <div className="font-medium text-gray-800">
                             {book.title}
                           </div>
-                          <div className="text-xs text-gray-500">
+                          {/* <div className="text-xs text-gray-500">
                             {book.slug}
+                          </div> */}
+                          <div className="text-xs text-gray-500">
+                            {book.subtitle}
                           </div>
                         </div>
                       </div>

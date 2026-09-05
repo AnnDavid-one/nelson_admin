@@ -1,11 +1,11 @@
 // src/app/(dashboard)/dashboard/page.tsx
 
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { api } from '@/lib/api';
-import { DashboardStats } from '@/lib/types';
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { api } from "@/lib/api";
+import { DashboardStats } from "@/lib/types";
 import {
   BookOpen,
   ShoppingCart,
@@ -15,7 +15,7 @@ import {
   Plus,
   Eye,
   Settings as SettingsIcon,
-} from 'lucide-react';
+} from "lucide-react";
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -27,7 +27,7 @@ export default function DashboardPage() {
         const data = await api.getDashboardStats();
         setStats(data);
       } catch (error) {
-        console.error('Failed to load stats:', error);
+        console.error("Failed to load stats:", error);
       } finally {
         setLoading(false);
       }
@@ -38,20 +38,20 @@ export default function DashboardPage() {
 
   const cards = [
     {
-      title: 'Total Books',
+      title: "Total Books",
       value: stats?.totalBooks || 0,
       subtitle: `${stats?.activeBooks || 0} active`,
       icon: BookOpen,
-      color: 'bg-blue-500',
-      href: '/books',
+      color: "bg-blue-500",
+      href: "/books",
     },
     {
-      title: 'Orders',
+      title: "Orders",
       value: stats?.totalOrders || 0,
       subtitle: `${stats?.pendingOrders || 0} pending`,
       icon: ShoppingCart,
-      color: 'bg-green-500',
-      href: '/orders',
+      color: "bg-green-500",
+      href: "/orders",
     },
     // {
     //   title: 'Revenue',
@@ -61,14 +61,14 @@ export default function DashboardPage() {
     //   color: 'bg-yellow-500',
     //   href: '/orders',
     // },
-    // 1223`    `d` 
+    // 1223`    `d`
     {
-      title: 'Customers',
+      title: "Customers",
       value: stats?.totalCustomers || 0,
-      subtitle: 'Registered customers',
+      subtitle: "Registered customers",
       icon: Users,
-      color: 'bg-orange-500',
-      href: '#',
+      color: "bg-orange-500",
+      href: "#",
     },
   ];
 
@@ -96,7 +96,9 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">{card.title}</p>
-                  <p className="text-2xl font-bold text-gray-800 mt-1">{card.value}</p>
+                  <p className="text-2xl font-bold text-gray-800 mt-1">
+                    {card.value}
+                  </p>
                   <p className="text-xs text-gray-500 mt-1">{card.subtitle}</p>
                 </div>
                 <div className={`${card.color} p-3 rounded-lg`}>
@@ -108,9 +110,7 @@ export default function DashboardPage() {
         })}
       </div>
 
-
-
-{/* add new book */}
+      {/* add new book */}
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Link
           href="/books/new/edit"

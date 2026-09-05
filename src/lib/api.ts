@@ -117,10 +117,11 @@ class ApiClient {
 
   async createBook(data: {
     title: string;
-    slug: string;
+    // slug: string; added only to the bbackend, not required from the frontend
     description: string;
     author?: string;
     format: BookFormat;
+    subtitle:string | null;
     priceKobo: number;
     coverImageUrl?: string;
     ebookFileUrl?: string;
@@ -308,6 +309,16 @@ async getAdminQuestions(subjectId: string) {
   );
   return response.data;
 }
+async uploadQuestionImage(id: string, file: File) {
+  const formData = new FormData();
+  formData.append('file', file);
+  const response = await this.api.post<{ question: CBTQuestion }>(`/cbt/questions/${id}/image`, formData);
+  return response.data;
+}
+
+
+
+
 
 async bulkImportQuestions(subjectId: string, questions: Array<{
   questionText: string;

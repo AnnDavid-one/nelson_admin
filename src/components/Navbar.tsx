@@ -22,7 +22,7 @@ const navItems = [
   { href: '/orders', label: 'Orders', icon: ShoppingCart },
   // { href: '/inquiries', label: 'Inquiries', icon: MessageSquare },
   { href: '/cbt', label: 'CBT', icon: Brain },
-  { href: '/settings', label: 'Settings', icon: Settings },
+  // { href: '/settings', label: 'Settings', icon: Settings },
 ];
 
 interface NavbarProps {

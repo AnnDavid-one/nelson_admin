@@ -16,7 +16,7 @@ export default function BookFormPage() {
   const [saving, setSaving] = useState(false);
   const [book, setBook] = useState<Partial<Book>>({
     title: '',
-    slug: '',
+    // slug: '',
     description: '',
     author: 'Nelson O. Bello',
     format: 'EBOOK' as BookFormat,
@@ -143,6 +143,18 @@ export default function BookFormPage() {
         </div>
 
         <div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Subtitle
+  </label>
+  <input
+    type="text"
+    value={book.subtitle || ''}
+    onChange={(e) => setBook({ ...book, subtitle: e.target.value })}
+    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+  />
+</div>
+
+        {/* <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Slug *
           </label>
@@ -156,7 +168,11 @@ export default function BookFormPage() {
           <p className="text-xs text-gray-500 mt-1">
             URL-friendly version of the title (e.g., "my-awesome-book")
           </p>
-        </div>
+        </div> */}{isEdit && book.slug && (
+  <p className="text-xs text-gray-500 -mt-4">
+    URL: /books/{book.slug} (fixed at creation)
+  </p>
+)}
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">

@@ -17,7 +17,7 @@ export default function CBTQuestionsPage() {
   const [bulkError, setBulkError] = useState<string | null>(null);
   const [bulkPreviewCount, setBulkPreviewCount] = useState<number | null>(null);
   const [bulkSubmitting, setBulkSubmitting] = useState(false);
-const [subject, setSubject] = useState<CBTSubject | null>(null);
+  const [subject, setSubject] = useState<CBTSubject | null>(null);
   const [questions, setQuestions] = useState<CBTQuestion[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -33,7 +33,9 @@ const [subject, setSubject] = useState<CBTSubject | null>(null);
     optionD: "",
     correctOption: "",
     explanation: "",
+    imageUrl: "",
   });
+  const [questionImageFile, setQuestionImageFile] = useState<File | null>(null);
 
   const loadData = async () => {
     setLoading(true);
@@ -44,12 +46,14 @@ const [subject, setSubject] = useState<CBTSubject | null>(null);
       ]);
       setSubject(subjectData.subject);
       setQuestions(questionsData.questions || []);
-  } catch (error) {
-  console.error("Failed to load subject data:", error);
-  setError("Failed to load subject or questions. Please verify the endpoint exists.");
-} finally {
-  setLoading(false);
-}
+    } catch (error) {
+      console.error("Failed to load subject data:", error);
+      setError(
+        "Failed to load subject or questions. Please verify the endpoint exists.",
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -59,11 +63,23 @@ const [subject, setSubject] = useState<CBTSubject | null>(null);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      let question;
       if (editingQuestion) {
-        await api.updateQuestion(subjectId, editingQuestion.id, formData);
+        const result = await api.updateQuestion(
+          subjectId,
+          editingQuestion.id,
+          formData,
+        );
+        question = result.question;
       } else {
-        await api.createQuestion(subjectId, formData);
+        const result = await api.createQuestion(subjectId, formData);
+        question = result.question;
       }
+
+      if (questionImageFile && question?.id) {
+        await api.uploadQuestionImage(question.id, questionImageFile);
+      }
+
       setShowModal(false);
       resetForm();
       await loadData();
@@ -93,6 +109,7 @@ const [subject, setSubject] = useState<CBTSubject | null>(null);
         optionD: question.optionD,
         correctOption: question.correctOption,
         explanation: question.explanation || "",
+        imageUrl: question.imageUrl || "",
       });
     } else {
       resetForm();
@@ -110,6 +127,7 @@ const [subject, setSubject] = useState<CBTSubject | null>(null);
       optionD: "",
       correctOption: "",
       explanation: "",
+      imageUrl: "",
     });
   };
 
@@ -192,24 +210,24 @@ const [subject, setSubject] = useState<CBTSubject | null>(null);
   };
 
   if (loading) {
-    return (        <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-        </div>
-      ) 
-  }
-  if(error) {
     return (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-          <p>{error}</p>
-          <button
-            onClick={loadData}
-            className="mt-2 text-sm font-semibold text-red-700 underline hover:text-red-800"
-          >
-            Try Again
-          </button>
-        </div>
-    
-    )
+      <div className="flex justify-center py-12">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+        <p>{error}</p>
+        <button
+          onClick={loadData}
+          className="mt-2 text-sm font-semibold text-red-700 underline hover:text-red-800"
+        >
+          Try Again
+        </button>
+      </div>
+    );
   }
 
   return (
@@ -248,9 +266,16 @@ const [subject, setSubject] = useState<CBTSubject | null>(null);
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <h3 className="font-semibold text-gray-800">
-                  Q{index + 1}: {question.questionText}
-                </h3>
-                <div className="mt-2 space-y-1 text-sm">
+  Q{index + 1}: {question.questionText}
+</h3>
+{question.imageUrl && (
+  <img
+    src={question.imageUrl}
+    alt="Question"
+    className="mt-2 max-h-40 rounded border"
+  />
+)}
+<div className="mt-2 space-y-1 text-sm">
                   <p>A. {question.optionA}</p>
                   <p>B. {question.optionB}</p>
                   <p>C. {question.optionC}</p>
@@ -404,6 +429,27 @@ const [subject, setSubject] = useState<CBTSubject | null>(null);
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                   rows={2}
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Question Image (optional)
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) =>
+                    setQuestionImageFile(e.target.files?.[0] || null)
+                  }
+                  className="block w-full text-sm"
+                />
+                {formData.imageUrl && !questionImageFile && (
+                  <img
+                    src={formData.imageUrl}
+                    alt="Current"
+                    className="mt-2 max-h-32 rounded border"
+                  />
+                )}
               </div>
 
               <div className="flex justify-end gap-2 pt-4">
