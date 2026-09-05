@@ -6,6 +6,11 @@ import { api } from '@/lib/api';
 import { Book, BookFormat } from '@/lib/types';
 import { Upload, X } from 'lucide-react';
 
+const koboToNaira = (kobo: number) => kobo / 100;
+const nairaToKobo = (naira: number) => Math.round(naira * 100);
+
+
+
 export default function BookFormPage() {
   const router = useRouter();
   const params = useParams();
@@ -14,6 +19,7 @@ export default function BookFormPage() {
 
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [priceNaira, setPriceNaira] = useState<number>(0);
   const [book, setBook] = useState<Partial<Book>>({
     title: '',
     // slug: '',
@@ -40,6 +46,7 @@ export default function BookFormPage() {
     try {
       const data = await api.getBook(bookId!);
       setBook(data.book);
+      setPriceNaira(koboToNaira(data.book.priceKobo));
       if (data.book.coverImageUrl) {
         setCoverPreview(data.book.coverImageUrl);
       }
@@ -215,18 +222,26 @@ export default function BookFormPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Price (in Kobo) *
-            </label>
-            <input
-              type="number"
-              value={book.priceKobo || 0}
-              onChange={(e) => setBook({ ...book, priceKobo: parseInt(e.target.value) || 0 })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-              required
-            />
-            <p className="text-xs text-gray-500 mt-1">1000 kobo = ₦10.00</p>
-          </div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Price (₦) *
+  </label>
+  <input
+    type="number"
+    value={priceNaira || 0}
+    onChange={(e) => {
+      const naira = parseFloat(e.target.value) || 0;
+      setPriceNaira(naira);
+      setBook({ ...book, priceKobo: nairaToKobo(naira) });
+    }}
+    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+    required
+  />
+  {priceNaira > 0 && priceNaira < 100 && (
+    <p className="text-xs text-red-600 mt-1">
+      ⚠️ Amount must be at least ₦100 — lower amounts are rejected by the bank transfer payment channel.
+    </p>
+  )}
+</div>
         </div>
 
         <div>
