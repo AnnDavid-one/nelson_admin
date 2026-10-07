@@ -9,6 +9,7 @@ import {
   ShoppingCart,
   MessageSquare,
   Brain,
+  Quote,
   Settings,
   LogOut,
   Menu,
@@ -22,6 +23,7 @@ const navItems = [
   { href: '/orders', label: 'Orders', icon: ShoppingCart },
   // { href: '/inquiries', label: 'Inquiries', icon: MessageSquare },
   { href: '/cbt', label: 'CBT', icon: Brain },
+  { href: '/testimonials', label: 'Testimonials', icon: Quote },
   // { href: '/settings', label: 'Settings', icon: Settings },
 ];
 

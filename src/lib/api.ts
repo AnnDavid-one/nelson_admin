@@ -14,6 +14,7 @@ import {
   PaginatedResponse,
   DashboardStats,
   BooksResponse,
+  Testimonial,
 } from './types';
 
 class ApiClient {
@@ -147,6 +148,11 @@ class ApiClient {
     return response.data;
   }
 
+  async deleteBook(id: string) {
+    const response = await this.api.delete<{ deleted: boolean }>(`/books/${id}`);
+    return response.data;
+  }
+
 
 async uploadBookCover(id: string, file: File) {
   const formData = new FormData();
@@ -161,6 +167,42 @@ async uploadBookEbook(id: string, file: File) {
   const response = await this.api.post<{ book: Book }>(`/books/${id}/ebook`, formData);
   return response.data;
 }
+
+  // ============ TESTIMONIALS ============
+  async getTestimonials() {
+    const response = await this.api.get<{ testimonials: Testimonial[] }>('/testimonials/admin/all');
+    return response.data;
+  }
+
+  async createTestimonial(data: {
+    name: string;
+    company?: string | null;
+    quote: string;
+    published?: boolean;
+  }) {
+    const response = await this.api.post<{ testimonial: Testimonial }>('/testimonials', data);
+    return response.data;
+  }
+
+  async updateTestimonial(
+    id: string,
+    data: { name?: string; company?: string | null; quote?: string; published?: boolean }
+  ) {
+    const response = await this.api.patch<{ testimonial: Testimonial }>(`/testimonials/${id}`, data);
+    return response.data;
+  }
+
+  async deleteTestimonial(id: string) {
+    const response = await this.api.delete<{ deleted: boolean }>(`/testimonials/${id}`);
+    return response.data;
+  }
+
+  async uploadTestimonialImage(id: string, file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await this.api.post<{ testimonial: Testimonial }>(`/testimonials/${id}/image`, formData);
+    return response.data;
+  }
 
   // ============ ORDERS ============
   // ⚠️ page/limit/status/search are accepted here but currently ignored

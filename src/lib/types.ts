@@ -215,3 +215,13 @@ export interface ApiResponse<T = any> {
   data?: T;
   error?: string;
 }
+export interface Testimonial {
+  id: string;
+  name: string;
+  company: string | null;
+  quote: string;
+  imageUrl: string | null;
+  published: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

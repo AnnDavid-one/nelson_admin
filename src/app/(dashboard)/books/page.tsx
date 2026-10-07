@@ -1,10 +1,11 @@
+//admin-frontend/src/app/%28dashboard%29/books/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
 import { Book, BookStatusLabels, BookStatusColors } from "@/lib/types";
-import { Plus, Edit, Eye, EyeOff } from "lucide-react";
+import { Plus, Edit, Eye, EyeOff, Trash2 } from "lucide-react";
 
 export default function BooksPage() {
   const [books, setBooks] = useState<Book[]>([]);
@@ -38,6 +39,24 @@ export default function BooksPage() {
       await loadBooks();
     } catch (error) {
       alert("Failed to toggle book status");
+    }
+  };
+
+  const deleteBook = async (book: Book) => {
+    if (
+      !window.confirm(
+        `Permanently delete "${book.title}"? This cannot be undone.`
+      )
+    ) {
+      return;
+    }
+    try {
+      await api.deleteBook(book.id);
+      await loadBooks();
+    } catch (error: any) {
+      alert(
+        error?.response?.data?.error || "Failed to delete book. Please try again."
+      );
     }
   };
 
@@ -163,6 +182,13 @@ export default function BooksPage() {
                           ) : (
                             <Eye className="h-4 w-4" />
                           )}
+                        </button>
+                        <button
+                          onClick={() => deleteBook(book)}
+                          className="p-1 text-red-600 hover:text-red-800 transition-colors"
+                          title="Delete permanently"
+                        >
+                          <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
                     </td>
